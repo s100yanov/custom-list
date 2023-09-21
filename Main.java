@@ -1,7 +1,6 @@
 package CustomListImplementation;
 
 import Countries.Country;
-
 import java.util.Random;
 
 public class Main {
@@ -20,27 +19,21 @@ public class Main {
 
         CustomList<Country> customList = new CustomList<>();
 
-        customList.addNode(Bulgaria);
-        customList.addNode(Romania);
+        customList.addNode(France);
+        customList.addNode(Spain);
+        customList.addNode(Italy);
         customList.addNode(Greece);
-        customList.addNode(Hungary);
         customList.addNode(Croatia);
+        customList.addNode(Romania);
+        customList.addNode(Hungary);
         customList.addNode(CzechRepublic);
         customList.addNode(Poland);
-        customList.addNode(Italy);
-        customList.addNode(Spain);
-        customList.addNode(France);
+        customList.addFirst(Bulgaria);
 
         System.out.println("List size: " + customList.listSize());
         System.out.println("------------------------------------------------");
-
-        int i = 0;
-        while (i < customList.listSize()) {
-            System.out.println(customList.elementAtIndex(i));
-            i++;
-        }
-        System.out.println("------------------------------------------------");
-
+        System.out.println("List by input order:");
+        printList(customList);
 
         Country Austria = new Country("Austria", "Vienna", "Europe", 9027999, 83871);
         Country Switzerland = new Country("Switzerland", "Bern", "Europe", 8636896, 41285);
@@ -57,45 +50,51 @@ public class Main {
 
         customList.mergeSort(new Countries.CompareByPopulation());
         System.out.println("The list sorted by 'Country Population', after adding new nodes:");
-        System.out.println("------------------------------------------------");
+        printList(customList);
 
-        int j = 0;
-        while (j < customList.listSize()) {
-            System.out.println(customList.elementAtIndex(j));
-            j++;
-        }
+        int indexOfRemovedElement = customList.removeValue(null);
+        System.out.println("Index of element, removed 'by Value': " + indexOfRemovedElement);
+        Country removedElement = customList.removeIndex(customList.listSize()- 1);
+        System.out.println("Element, removed 'by Index': " + removedElement);
+        System.out.println("List content after deletion:");
+        printList(customList);
 
-        customList.removeValue(null);
-        System.out.println("------------------------------------------------");
-        System.out.println("List content after element deletion:");
-        System.out.println("------------------------------------------------");
-
-        for (Countries.Country state : customList) {
-            System.out.println(state);
-        }
-
-        System.out.println("------------------------------------------------");
-        System.out.println("The list in details, sorted by 'Country Area':");
-        System.out.println("------------------------------------------------");
         customList.selectionSort(new Countries.CompareByArea());
         CustomList<Country>.customIterator listItr = customList.new customIterator();
+        System.out.println("The list in details, sorted by 'Country Area':");
+        printDetails(listItr);
 
-        while (listItr.hasNext()) {
-            Country current = listItr.next();
-            System.out.println(current + "  ||  population " + current.getPopulation() + "  ||  area " + current.getArea());
-        }
-
+        System.out.println("List contains Bulgaria: " + customList.contains(Bulgaria));
+        System.out.println("List contains Germany: " + customList.contains(Germany));
         System.out.println("------------------------------------------------");
+
         System.out.printf("First element: %s -> Last element: %s\n", customList.firstElement(), customList.lastElement());
         System.out.println("------------------------------------------------");
 
         Random rand = new Random();
         int randomIndex = rand.nextInt(customList.listSize());
-
         Country country = customList.elementAtIndex(randomIndex);
         System.out.printf("Index %d contains: %s\n", randomIndex, country);
         System.out.println("------------------------------------------------");
+
         customList.reverse();
         System.out.printf("Index of %s after reversal: %d\n", country, customList.indexOf(country));
+    }
+
+    private static void printList(CustomList<Country> countries){
+        System.out.println("------------------------------------------------");
+        for (Countries.Country state : countries) {
+            System.out.println(state);
+        }
+        System.out.println("------------------------------------------------");
+    }
+
+    private static void printDetails(CustomList<Country>.customIterator itr) {
+        System.out.println("------------------------------------------------");
+        while (itr.hasNext()) {
+            Country current = itr.next();
+            System.out.println(current + "  ||  population " + current.getPopulation() + "  ||  area " + current.getArea());
+        }
+        System.out.println("------------------------------------------------");
     }
 }

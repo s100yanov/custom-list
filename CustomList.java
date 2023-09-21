@@ -12,32 +12,32 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
         private Node previous;
 
         private Node(E item) {
-            this.item = item;
-            this.next = null;
-            this.previous = null;
+            setItem(item);
+            setNext(null);
+            setPrevious(null);
         }
 
-        public E getItem() {
+        private E getItem() {
             return this.item;
         }
 
-        public void setItem(E item) {
+        private void setItem(E item) {
             this.item = item;
         }
 
-        public Node getNext() {
+        private Node getNext() {
             return this.next;
         }
 
-        public void setNext(Node next) {
+        private void setNext(Node next) {
             this.next = next;
         }
 
-        public Node getPrevious() {
+        private Node getPrevious() {
             return this.previous;
         }
 
-        public void setPrevious(Node previous) {
+        private void setPrevious(Node previous) {
             this.previous = previous;
         }
     }
@@ -47,7 +47,8 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
     private int size;
 
     public CustomList() {
-        this.head = this.tail = null;
+        this.head = null;
+        this.tail = null;
         this.size = 0;
     }
 
@@ -74,26 +75,33 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
             head.setPrevious(newNode);
             newNode.setNext(head);
             head = newNode;
+            size++;
         }
     }
 
     public E removeIndex(int index) {
-        if (index < 0 || index >= listSize()) {
-            throw new IndexOutOfBoundsException("Invalid index !");
+        Node currentNode = findValue(index);
+        Node previousNode = currentNode.getPrevious();
+        removeAndReArrange(currentNode, previousNode);
+
+        return currentNode.getItem();
+    }
+
+    public int removeValue(E value) {
+        int currentIndex = indexOf(value);
+        if (currentIndex == -1) {
+            throw new NoSuchElementException("Passed value does not exist !");
         }
+        Node currentNode = findValue(currentIndex);
+        Node previousNode = currentNode.getPrevious();
+        removeAndReArrange(currentNode, previousNode);
 
-        Node currentNode = head;
-        Node previousNode = null;
-        int currentIndex = 0;
+        return currentIndex;
+    }
 
-        while (currentIndex < index) {
-            previousNode = currentNode;
-            currentNode = currentNode.getNext();
-            currentIndex++;
-        }
-
+    private void removeAndReArrange(Node currentNode, Node previousNode) {
         size--;
-        if (size == 0) {
+        if(size == 0) {
             head = tail = null;
         }
         else if (previousNode == null) {
@@ -101,51 +109,64 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
             head.setPrevious(null);
         }
         else if (currentNode.getNext() == null) {
-            previousNode.setNext(null);
-            tail = previousNode;
+            tail = tail.getPrevious();
+            tail.setNext(null);
         }
         else {
             previousNode.setNext(currentNode.getNext());
             currentNode.getNext().setPrevious(previousNode);
         }
-        return currentNode.getItem();
     }
 
-    public int removeValue(E value) {
-        Node currentNode = head;
-        Node previousNode = null;
-        int currentIndex = 0;
+    private Node findValue(int index) {
+        if (index < 0 || index >= this.listSize()) {
+            throw new IndexOutOfBoundsException("Invalid index !");
+        }
 
-        while (currentNode != null) {
-            if ((currentNode.getItem() != null) && (currentNode.getItem().equals(value))
-                    || (currentNode.getItem() == null) && (value == null)) {
-                break;
-            }
-            previousNode = currentNode;
+        Node currentNode = head;
+        int currentIndex = 0;
+        while (currentIndex < index) {
             currentNode = currentNode.getNext();
             currentIndex++;
         }
 
-        if (currentNode != null) {
-            size--;
-            if(size == 0) {
-                head = tail = null;
+        return currentNode;
+    }
+
+    public int indexOf(E item) {
+        Node currentNode = head;
+        int currentIndex = 0;
+
+        while (currentNode != null) {
+            if(currentNode.getItem() != null && currentNode.getItem().equals(item)
+                    || currentNode.getItem() == null && item == null) {
+                return currentIndex;
             }
-            else if (previousNode == null) {
-                head = head.getNext();
-                head.setPrevious(null);
-            }
-            else if (currentNode.getNext() == null) {
-                previousNode.setNext(null);
-                tail = previousNode;
-            }
-            else {
-                previousNode.setNext(currentNode.getNext());
-                currentNode.getNext().setPrevious(previousNode);
-            }
-            return currentIndex;
+            currentNode = currentNode.getNext();
+            currentIndex++;
         }
         return -1;
+    }
+
+    public E elementAtIndex(int index) {
+        Node currentNode = findValue(index);
+        return currentNode.getItem();
+    }
+
+    public boolean contains(E item) {
+        return indexOf(item) != -1;
+    }
+
+    public int listSize(){
+        return this.size;
+    }
+
+    public E firstElement() {
+        return this.head.getItem();
+    }
+
+    public E lastElement() {
+        return this.tail.getItem();
     }
 
     public void reverse() {
@@ -164,52 +185,6 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
         head = previousNode;
     }
 
-    public int indexOf(E item) {
-        Node currentNode = head;
-        int currentIndex = 0;
-
-        while (currentNode != null) {
-            if(currentNode.getItem() != null && currentNode.getItem().equals(item)
-                    || currentNode.getItem() == null && item == null) {
-                return currentIndex;
-            }
-            currentNode = currentNode.getNext();
-            currentIndex++;
-        }
-        return -1;
-    }
-
-    public boolean contains(E item) {
-        return indexOf(item) != -1;
-    }
-
-    public E elementAtIndex(int index) {
-        if (index < 0 || index >= listSize()) {
-            throw new IndexOutOfBoundsException("Invalid index !");
-        }
-        Node currentNode = head;
-        int currentIndex = 0;
-
-        while (currentIndex < index) {
-            currentNode = currentNode.getNext();
-            currentIndex++;
-        }
-
-        return currentNode.getItem();
-    }
-
-    public int listSize(){
-        return this.size;
-    }
-
-    public E firstElement() {
-        return this.head.getItem();
-    }
-
-    public E lastElement() {
-        return this.tail.getItem();
-    }
-
     public void selectionSort(Comparator<E> comparator) {
         sort(comparator);
     }
@@ -226,10 +201,7 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
         while (previousNode.getNext() != null) {
             currentNode = previousNode.getNext();
             while (currentNode != null){
-
-                if(comparator != null) {
-                    compared = comparator.compare(currentNode.getItem(), previousNode.getItem());
-                }
+                compared = comparator.compare(currentNode.getItem(), previousNode.getItem());
 
                 if (compared < 0) {
                     swapPrevious.setPrevious(previousNode.getPrevious());
@@ -282,7 +254,7 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
     }
 
     private Node mergeSort(Node head, Comparator<E> comparator) {
-        if (head.next == null) {
+        if (head.getNext() == null) {
             return head;
         }
 
@@ -306,7 +278,6 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
             slow = slow.getNext();
             fast = fast.getNext().getNext();
         }
-
         return slow;
     }
 
@@ -314,39 +285,43 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
         Node merged = new Node(null);
         Node temp = merged;
         int compared = 0;
+        boolean arrangeHasBeenCalled = false;
 
         while (leftHead != null && rightHead != null) {
             compared = comparator.compare(leftHead.getItem(), rightHead.getItem());
-            if (compared <= 0) {
-                temp.setNext(leftHead);
-                leftHead.setPrevious(temp);
-                leftHead = leftHead.getNext();
-                temp = temp.getNext();
+            if (compared < 0) {
+               leftHead = arrange(leftHead, temp, arrangeHasBeenCalled);
             }
             else {
-                temp.setNext(rightHead);
-                rightHead.setPrevious(temp);
-                rightHead = rightHead.getNext();
-                temp = temp.getNext();
+                rightHead = arrange(rightHead, temp, arrangeHasBeenCalled);
             }
+            temp = temp.getNext();
+            arrangeHasBeenCalled = true;
         }
 
         while (leftHead != null) {
-            temp.setNext(leftHead);
-            leftHead.setPrevious(temp);
-            leftHead = leftHead.getNext();
+            leftHead = arrange(leftHead, temp, arrangeHasBeenCalled);
             temp = temp.getNext();
+            arrangeHasBeenCalled = true;
         }
 
         while (rightHead != null) {
-            temp.setNext(rightHead);
-            rightHead.setPrevious(temp);
-            rightHead = rightHead.getNext();
+            rightHead = arrange(rightHead, temp, arrangeHasBeenCalled);
             temp = temp.getNext();
+            arrangeHasBeenCalled = true;
         }
 
         this.tail = temp;
         return merged.getNext();
+    }
+
+    private Node arrange(Node head, Node temp, boolean hasBeenCalled) {
+        if (hasBeenCalled) {
+            head.setPrevious(temp);
+        }
+        temp.setNext(head);
+        head = head.getNext();
+        return head;
     }
 
     public Iterator<E> iterator() {
@@ -391,7 +366,7 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
             if (previousNode == null && currentNode.getNext() == null) {
                 head = tail = null;
             } else if (previousNode == null && currentNode.getNext() != null) {
-                currentNode.getNext().setPrevious(previousNode);
+                currentNode.getNext().setPrevious(null);
                 currentNode = currentNode.getNext();
                 head = currentNode;
             } else if (previousNode != null && currentNode.getNext() == null) {

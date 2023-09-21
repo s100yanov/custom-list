@@ -1,6 +1,6 @@
 /out
 /.idea
-/src/Exercises
-/src/CustomLinkedList.java
-HashTables.iml
+/src/Test
+/src/Tool.java
+CustomList.iml
 TEST.txt

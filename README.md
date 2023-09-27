@@ -23,7 +23,7 @@
 > Nested Node Class - this is a private nested class, providing the main structural unit of the list - a Node, hence it's creation and functionionality.
 > Country Class - provides custom objects of type Country with their 
 respective attributes. 
-> Three classes implementing Comparator - useful for County Class objects 
+> Three classes implementing Comparator - useful for Country Class objects 
 comparison and sorting.
 > Main Class - it's purpose is testing the List Functionality.
 > This is Generic list, it works with different kind of objects, so the Country 
@@ -33,4 +33,4 @@ custom objects.
 it's objects possible and serves the sorting function of the List. 
 > With the goal to offer different sorting critera the three Comparator 
 implementing classes are added.
-> Sorting and NULL values - the concept of sorting the elements in the list is in ascending order. Regarding the null values - the chosen logic in this implementation is to treat them as biggest values and put them at the end of the list. 
+> Sorting and NULL values - the concept of sorting the elements in the list is in ascending order. Regarding the null values - the applied logic in this implementation is to treat them as highest values and put them at the end of the list. 

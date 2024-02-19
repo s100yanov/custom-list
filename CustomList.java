@@ -185,6 +185,10 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
         head = previousNode;
     }
 
+    public void selectionSort() {
+        sort(null);
+    }
+
     public void selectionSort(Comparator<E> comparator) {
         sort(comparator);
     }
@@ -201,8 +205,13 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
         while (previousNode.getNext() != null) {
             currentNode = previousNode.getNext();
             while (currentNode != null){
-                compared = comparator.compare(currentNode.getItem(), previousNode.getItem());
 
+                if(comparator != null) {
+                    compared = comparator.compare(currentNode.getItem(), previousNode.getItem());
+                }
+                else {
+                    compared = currentNode.getItem().compareTo(previousNode.getItem());
+                }
                 if (compared < 0) {
                     swapPrevious.setPrevious(previousNode.getPrevious());
                     swapPrevious.setNext(previousNode.getNext());
@@ -236,7 +245,6 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
                 }
                 currentNode = currentNode.getNext();
             }
-
             count++;
             if (count == 1) {
                 head = previousNode;
@@ -247,6 +255,10 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
                 tail = previousNode;
             }
         }
+    }
+
+    public void mergeSort() {
+        mergeSort(this.head, null);
     }
 
     public void mergeSort(Comparator<E> comparator) {
@@ -288,7 +300,12 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
         boolean arrangeHasBeenCalled = false;
 
         while (leftHead != null && rightHead != null) {
-            compared = comparator.compare(leftHead.getItem(), rightHead.getItem());
+            if (comparator == null) {
+                compared = leftHead.getItem().compareTo(rightHead.getItem());
+            }
+            else {
+                compared = comparator.compare(leftHead.getItem(), rightHead.getItem());
+            }
             if (compared < 0) {
                leftHead = arrange(leftHead, temp, arrangeHasBeenCalled);
             }

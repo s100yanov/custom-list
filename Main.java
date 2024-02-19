@@ -35,6 +35,10 @@ public class Main {
         System.out.println("List by input order:");
         printList(customList);
 
+        System.out.println("The list sorted by 'Country Name':");
+        customList.mergeSort();
+        printList(customList);
+
         Country Austria = new Country("Austria", "Vienna", "Europe", 9027999, 83871);
         Country Switzerland = new Country("Switzerland", "Bern", "Europe", 8636896, 41285);
         Country Germany = new Country("Germany", "Berlin", "Europe", 84270625, 357592);
@@ -68,7 +72,7 @@ public class Main {
         System.out.println("List contains Germany: " + customList.contains(Germany));
         System.out.println("------------------------------------------------");
 
-        System.out.printf("First element: %s -> Last element: %s\n", customList.firstElement(), customList.lastElement());
+        System.out.printf("First element: %s \nLast element: %s\n", customList.firstElement(), customList.lastElement());
         System.out.println("------------------------------------------------");
 
         Random rand = new Random();

@@ -1,36 +1,31 @@
-# Custom List Implementation
+# Spring Boot Application connected to MySQL server
 ----------------------------
-## Custom List Implementation, offering some typical features of Linked Lists and Array Lists. The List implementation is accompanied by some helper classes.
+## Spring Boot Application, utilizing Spring Data JPA to interact with MySQL DB server. It represents a model of geographical units with relationships between them. The project is structured, following the Controller, Service, Repository pattern with the corresponding packages. 
 
-- Nested Node Class
-- Country Class
-- Two Classes Implementing Comparator
-- Main Class
+- controller, containing the REST APIs
+- service, containing the business logic
+- repository, containing the data access logic
+- model, containing the Entity Classes
+- dto, containing the DTO Records
+- GeographicalUnitsApplication Class, the launcher of the App
+- resources, containing the application.properties - the app configuration file
+- pom.xml, the project-build configuration file
+----------------------------
 
+## Structure
 
-## Features
+- Three Model classes with bidirectional relationships, managed by Hibernate, stored as DB entities
+- Each Entity class is served by it's own RestController and Service classes, DTO records and Repository interfaces, which together provide the needed functionality to process the data and interact with the DB 
+- Three helper classes - mappers, placed in the service package, perform the mapping DTO to Entity and Entity to ResponseDTO
+- In the application.properties file, the necessary configuration regarding the connectivity to a remote MySQL server can be found
+- In the pom.xml file, all the necessary dependencies and plugins can be found
+----------------------------
+### The Application works with data in JSON format and multipart files. It supports the CRUD operations.
 
-- Doubly Linked List - works in both directions
-- Indexing - makes working with indexes possible
-- Sorting - two built-in sorting algorithms - Selection Sort and Merge Sort
-- Built-in Iterator - for list traversal
-- Reversing Function - as the name states, it reverses the direction and order of the list
-------------------------------------------
-
-### The List works with the standard input and output. There are several helper classes.
-
-> The functionality of the List is supported by additional classes, briefly described here.
-> Nested Node Class - this is a private nested class, providing the main structural unit of the list - a Node, hence it's creation and functionality.
-> Country Class - provides custom objects of type Country with their 
-respective attributes. 
-> Two classes implementing Comparator - useful for Country Class objects 
-comparison and sorting.
-> Main Class - it's purpose is testing the List Functionality.
-> This is Generic list, it works with different kinds of objects, so the Country 
-class only serves as an example of the capability of the list to work with 
-custom objects.
-> The Country Class implements Comparable, so it makes the comparison of 
-it's objects possible and serves the sorting function of the List. 
-> With the goal to offer different sorting critera the two Comparator 
-implementing classes are added.
-> Sorting and NULL values - the concept of sorting the elements in the list is in ascending order. Regarding the null values - the applied logic in this implementation is to treat them as highest values and put them at the end of the list. 
+> The hierarchy of the entities and their interactions are described here.
+> Continent is a parent entity, containing one-to-many relationship with Country/many countries as child entity/entities.
+> Country has many-to-one relationship with it's parent entity Continent and one-to-one relationship with it's child entity - Flag.
+> Flag has one-to-one relationship with it's parent entity Country.
+> @JsonManagedReference and @JsonBackReference are used to avoid infinite recursion.
+> Cascading is used to ensure the child entity is affected by the same action as it's parent. More functionality is added to the child side, to make it possible to independently remove child entity.
+> The Flag(MultipartFile) is stored in and retrieved from separate storage. In the database only details about the file are stored. Hence two endpoints for retrieval are added in the Flag's RestController - getFlagByName for file downloading from the storage and getFlagDetails for retrieving only the details from the database.

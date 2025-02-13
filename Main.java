@@ -64,7 +64,7 @@ public class Main {
         printList(customList);
 
         customList.selectionSort(new Countries.CompareByArea());
-        CustomList<Country>.customIterator listItr = customList.new customIterator();
+        CustomList<Country>.CustomIterator listItr = customList.new CustomIterator();
         System.out.println("The list in details, sorted by 'Country Area':");
         printDetails(listItr);
 
@@ -93,7 +93,7 @@ public class Main {
         System.out.println("------------------------------------------------");
     }
 
-    private static void printDetails(CustomList<Country>.customIterator itr) {
+    private static void printDetails(CustomList<Country>.CustomIterator itr) {
         System.out.println("------------------------------------------------");
         while (itr.hasNext()) {
             Country current = itr.next();

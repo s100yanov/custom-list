@@ -342,10 +342,10 @@ public class CustomList<E extends Comparable<E>> implements Iterable<E> {
     }
 
     public Iterator<E> iterator() {
-        return new customIterator();
+        return new CustomIterator();
     }
 
-    public class customIterator implements Iterator<E> {
+    public class CustomIterator implements Iterator<E> {
         private Node currentNode = null;
         private Node previousNode = null;
         private boolean hasBeenCalled = false;
